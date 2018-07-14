@@ -1,6 +1,7 @@
 const path = require('path');
 const express = require('express');
 
+
 //this module helps to change the path that the express 
 //server takes so that instead of going into 'server', back out of 
 //'server' and then into 'public', it starts up at 'node-chat-app'
