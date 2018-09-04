@@ -8,7 +8,7 @@ const socketIO = require('socket.io')
 //'server' and then into 'public', it starts up at 'node-chat-app'
 //and then straight into public.
 const publicPath = path.join(__dirname, '../public')
-const {generateMessage} = require('./utils/message')
+const {generateMessage, generateLocationMessage} = require('./utils/message')
 const port = process.env.PORT || 3000
 var app = express()
 var server = http.createServer(app)
@@ -30,7 +30,7 @@ io.on('connection', (socket) => {
     })
 
     socket.on('createLocationMessage', (coords) => {
-        io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.longitude}`))
+        io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude))
     })
 
     socket.on('disconnect', (socket) => {
