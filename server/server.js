@@ -7,6 +7,7 @@ const socketIO = require('socket.io')
 //server takes so that instead of going into 'server', back out of 
 //'server' and then into 'public', it starts up at 'node-chat-app'
 //and then straight into public.
+
 const publicPath = path.join(__dirname, '../public')
 const {generateMessage, generateLocationMessage} = require('./utils/message')
 const {isRealString} = require('./utils/validation');
@@ -20,14 +21,15 @@ app.use(express.static(publicPath))
 io.on('connection', (socket) => {
     console.log('New user connected')
 
-    socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app!'))
-
-    socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined'))
-
     socket.on('join', (params, callback) => {
         if(!isRealString(params.name) || !isRealString(params.room)) {
             callback('Name and Room name are required.')
         }
+
+        socket.join(params.room);
+
+        socket.emit('newMessage', generateMessage('Admin', 'Welcome to the chat app!'))
+        socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined.`))
 
         callback();
     })
