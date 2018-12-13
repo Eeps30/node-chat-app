@@ -46,6 +46,14 @@ socket.on('disconnect', function () {
     console.log('Disconnected from Server')
 })
 
+socket.on('updateUserList', function(users) {
+    var ol = jQuery('<ol></ol>');
+    users.forEach(function(user){
+        ol.append(jQuery('<li></li>').text(user))
+    });
+    jQuery('#users').html(ol);
+})
+
 socket.on('newLocationMessage', function (message) {
     var formattedTime = moment(message.createdAt).format('h:mm a')
     var template = jQuery('#location-message-template').html();
